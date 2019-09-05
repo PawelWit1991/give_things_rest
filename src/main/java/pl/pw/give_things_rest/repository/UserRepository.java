@@ -8,5 +8,5 @@ import pl.pw.give_things_rest.model.User;
 public interface UserRepository extends JpaRepository<User, Long> {
 
 
-
+    User findByEmail(String email);
 }

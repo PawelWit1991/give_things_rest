@@ -2,16 +2,21 @@ package pl.pw.give_things_rest.service;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Service;
 import pl.pw.give_things_rest.model.Donation;
+import pl.pw.give_things_rest.model.User;
 import pl.pw.give_things_rest.repository.DonationRepository;
 import pl.pw.give_things_rest.repository.ItemRepository;
 import pl.pw.give_things_rest.repository.ProfileRepository;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+import java.awt.print.Pageable;
 
 @Service
+@Transactional
 public class DonationService {
 
 
@@ -30,6 +35,11 @@ public class DonationService {
 
     public Donation getById(Long id) {
         return donationRepository.findById(id).orElseThrow(()->new EntityNotFoundException());
+    }
+
+
+    public Page<Donation> findAll(@PageableDefault org.springframework.data.domain.Pageable pageable) {
+        return donationRepository.findAll(pageable);
     }
 
 //    public Donation update(Donation donation){
