@@ -27,14 +27,14 @@ public class DonationService {
     @Autowired
     private ProfileRepository profileRepository;
 
-    public Donation save(Donation donation){
-       donation.setItem(itemRepository.save(donation.getItem()));
-       donation.setProfile(profileRepository.save(donation.getProfile()));
+    public Donation save(Donation donation) {
+        donation.setItem(itemRepository.save(donation.getItem()));
+        donation.setProfile(profileRepository.save(donation.getProfile()));
         return donationRepository.save(donation);
     }
 
     public Donation getById(Long id) {
-        return donationRepository.findById(id).orElseThrow(()->new EntityNotFoundException());
+        return donationRepository.findById(id).orElseThrow(() -> new EntityNotFoundException());
     }
 
 
@@ -42,16 +42,48 @@ public class DonationService {
         return donationRepository.findAll(pageable);
     }
 
-//    public Donation update(Donation donation){
-//
-//        return donationRepository.findById(donation.getId()).map(donationdb ->{
-//
-//            if(donation.getAddress()!=null){
-//                donationdb.setAddress(donation.getAddress());
-//            }
-//            if(donation.getCity()!=null){
-//                donationdb.setCity(donation.getCity());
-//            }
-//
-//    }
+    public Donation update(Donation donation) {
+
+        return donationRepository.findById(donation.getId()).map(donationdb -> {
+
+            if (donation.getAddress() != null) {
+                donationdb.setAddress(donation.getAddress());
+            }
+            if (donation.getCity() != null) {
+                donationdb.setCity(donation.getCity());
+            }
+            if (donation.getZip() != null) {
+                donationdb.setZip(donation.getZip());
+            }
+            if (donation.getPhone() != null) {
+                donationdb.setPhone(donation.getPhone());
+            }
+            if (donation.getProfile() != null) {
+                donationdb.setProfile(donation.getProfile());
+            }
+            if (donation.getInfo() != null) {
+                donationdb.setInfo(donation.getInfo());
+            }
+            if (donation.getItem() != null) {
+                donationdb.setItem(donation.getItem());
+            }
+            if (donation.getInstitution() != null) {
+                donationdb.setInstitution(donation.getInstitution());
+            }
+            if (donation.getNumberOfBags() != null) {
+                donationdb.setNumberOfBags(donation.getNumberOfBags());
+            }
+            if (donation.getPickupDate() != null) {
+                donationdb.setPickupDate(donation.getPickupDate());
+            }
+            if (donation.getPickupTime() != null) {
+                donationdb.setPickupTime(donation.getPickupTime());
+            }
+            if (donation.getUser() != null) {
+                donationdb.setUser(donation.getUser());
+            }
+            return donationRepository.save(donation);
+        }).orElse(new Donation());
+
+    }
 }

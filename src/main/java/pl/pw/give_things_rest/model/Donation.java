@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -42,9 +44,9 @@ public class Donation {
 
     private String phone;
 
-    private String pickupDate;
+    private LocalDate pickupDate;
 
-    private String pickupTime;
+    private LocalDateTime pickupTime;
 
     private String info;
 }

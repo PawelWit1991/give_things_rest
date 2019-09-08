@@ -31,4 +31,10 @@ public class DonationController {
     public Page<Donation> all(Pageable pageable){
         return donationService.findAll(pageable);
     }
+
+    @PutMapping
+    public Donation update(@RequestBody Donation donation){
+        return donationService.update(donation);
+    }
 }
+
