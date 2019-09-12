@@ -6,14 +6,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Service;
 import pl.pw.give_things_rest.model.Donation;
-import pl.pw.give_things_rest.model.User;
 import pl.pw.give_things_rest.repository.DonationRepository;
+import pl.pw.give_things_rest.repository.InstitutionRepository;
 import pl.pw.give_things_rest.repository.ItemRepository;
-import pl.pw.give_things_rest.repository.ProfileRepository;
+import pl.pw.give_things_rest.repository.UserRepository;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
-import java.awt.print.Pageable;
 
 @Service
 @Transactional
@@ -25,12 +24,21 @@ public class DonationService {
     @Autowired
     private ItemRepository itemRepository;
     @Autowired
-    private ProfileRepository profileRepository;
+    private UserRepository userRepository;
+    @Autowired
+    private InstitutionRepository institutionRepository;
 
-    public Donation save(Donation donation) {
-        donation.setItem(itemRepository.save(donation.getItem()));
-        donation.setProfile(profileRepository.save(donation.getProfile()));
-        return donationRepository.save(donation);
+    public Donation save(Donation donation, Long userId, Long institutionId) {
+
+        return userRepository.findById(userId).map(user ->
+            institutionRepository.findById(institutionId).map(institution -> {
+                donation.setItem(itemRepository.save(donation.getItem()));
+                donation.setUser(user);
+                donation.setInstitution(institution);
+                return donationRepository.save(donation);
+            }).orElseThrow(() -> new EntityNotFoundException("Institution with id " + institutionId + " not found"))
+        ).orElseThrow(() -> new EntityNotFoundException("User with with id " + userId + " not found"));
+
     }
 
     public Donation getById(Long id) {
@@ -58,9 +66,6 @@ public class DonationService {
             if (donation.getPhone() != null) {
                 donationdb.setPhone(donation.getPhone());
             }
-            if (donation.getProfile() != null) {
-                donationdb.setProfile(donation.getProfile());
-            }
             if (donation.getInfo() != null) {
                 donationdb.setInfo(donation.getInfo());
             }
@@ -76,14 +81,15 @@ public class DonationService {
             if (donation.getPickupDate() != null) {
                 donationdb.setPickupDate(donation.getPickupDate());
             }
-            if (donation.getPickupTime() != null) {
-                donationdb.setPickupTime(donation.getPickupTime());
-            }
             if (donation.getUser() != null) {
                 donationdb.setUser(donation.getUser());
             }
             return donationRepository.save(donation);
         }).orElse(new Donation());
 
+    }
+
+    public void delete(Long id) {
+        donationRepository.deleteById(id);
     }
 }

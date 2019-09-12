@@ -2,9 +2,13 @@ package pl.pw.give_things_rest.service;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pl.pw.give_things_rest.model.Institution;
 import pl.pw.give_things_rest.repository.InstitutionRepository;
+
+import javax.persistence.EntityNotFoundException;
 
 @Service
 public class InstitutionService {
@@ -26,11 +30,15 @@ public class InstitutionService {
         }).orElse(new Institution());
     }
 
-    public void delete(long id) {
+    public void delete(Long id) {
         institutionRepository.deleteById(id);
     }
 
-    public Institution findByInstitutionId(long id) {
-        return institutionRepository.findById(id).orElse(new Institution());
+    public Institution findByInstitutionId(Long id) {
+        return institutionRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Intitution with id "+ id + " not found"));
+    }
+
+    public Page<Institution> all(Pageable pageable) {
+        return institutionRepository.findAll(pageable);
     }
 }

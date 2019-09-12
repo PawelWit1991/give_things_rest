@@ -22,20 +22,6 @@ public class Donation {
 
     private Long numberOfBags;
 
-    @OneToOne()
-    @JoinColumn(name = "item_id")
-    private Item item;
-
-    @OneToOne
-    @JoinColumn(name = "profile_id")
-    private Profile profile;
-
-    @Column(name = "institution_id")
-    private Long institution;
-
-    @Column(name = "user_id")
-    private Long user;
-
     private String address;
 
     private String zip;
@@ -44,9 +30,19 @@ public class Donation {
 
     private String phone;
 
-    private LocalDate pickupDate;
-
-    private LocalDateTime pickupTime;
+    private LocalDateTime pickupDate;
 
     private String info;
+
+    @OneToOne()
+    @JoinColumn(name = "item_id")
+    private Item item;
+
+    @ManyToOne
+    @JoinColumn(name = "institution_id")
+    private Institution institution;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }
